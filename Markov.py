@@ -46,12 +46,10 @@ class Transition:
                         trans_list_to_return.append(Transition(fcp, 'H', (0, rep_second+card_possiblity, dealers_first_card)))
             # soft values, Ace + something
             elif rep_first == 1 & rep_second != 1:
-
+                pass
             #duplicates
             else:
-
-
-
+                pass
 class State:
     def init(self, rep_first, rep_second, dealers_first_card, is_first, is_goal, face_card_probability):
         self.rep_first = rep_first
@@ -65,7 +63,7 @@ class State:
         # the states that inherent reward.
         self.transitions = []
         # absorbing goals can't get out of goal
-        if !(is_goal):
+        if (not(is_goal)):
             self.transitions = make_transitions(rep_first, rep_second, dealers_first_card, face_card_probability)
 
 # initialize all states for the game here.
