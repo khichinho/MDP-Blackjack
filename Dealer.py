@@ -4,4 +4,4 @@
 
 # function for returning reward of player after stand state.
 # called in Player Black Jack MDP
-def rewardPlayer():
+def rewardPlayer(player_hand_value, dealer_first_card):
