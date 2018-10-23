@@ -27,13 +27,25 @@ class Transition:
             if rep_first == 0:
                 # ace comes for a hand containing no ace previously
                 if card_possiblity == 1:
-                    if rep_second < 10:
+                    if rep_second <= 10:
                         trans_list_to_return.append(Transition((1-fcp)/9, 'H', (1, rep_second, dealers_first_card)))
-                else if 2 <= card_possiblity <= 9:
+                    else:
+                        # bust
+                        trans_list_to_return.append(Transition((1-fcp)/9, 'H', (0, rep_second+1, dealers_first_card)))
+                # any non face non ace card
+                elif 2 <= card_possiblity <= 9:
+                    if rep_second+card_possiblity > 21:
+                        trans_list_to_return.append(Transition((1-fcp)/9, 'H', (21, 0, 0)))
+                    else:
+                        trans_list_to_return.append(Transition((1-fcp)/9, 'H', (0, rep_second+card_possiblity, dealers_first_card)))
+                # face card
                 else:
-
+                    if rep_second+card_possiblity > 21:
+                        trans_list_to_return.append(Transition(fcp, 'H', (21, 0, 0)))
+                    else:
+                        trans_list_to_return.append(Transition(fcp, 'H', (0, rep_second+card_possiblity, dealers_first_card)))
             # soft values, Ace + something
-            else if rep_first == 1 & rep_second != 1:
+            elif rep_first == 1 & rep_second != 1:
 
             #duplicates
             else:
@@ -41,10 +53,12 @@ class Transition:
 
 
 class State:
-    def init(self, rep_first, rep_second, dealers_first_card, is_goal, face_card_probability):
+    def init(self, rep_first, rep_second, dealers_first_card, is_first, is_goal, face_card_probability):
         self.rep_first = rep_first
         self.rep_second = rep_second
         self.dealers_first_card = dealers_first_card
+
+        self.is_first = is_first
         
         self.is_goal = is_goal
         # TODO: correct to make goal states bust and states after stop.
