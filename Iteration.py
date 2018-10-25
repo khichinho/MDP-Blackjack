@@ -1,5 +1,6 @@
 import Markov
 import Dealer
+import sys
 
 class Dp_solver:
     def __init__(self, fcp):
@@ -80,3 +81,10 @@ class Dp_solver:
                 while not(-epsilon < (curr_val-prev_val) < epsilon):
                     prev_val = curr_val
                     curr_val = self.solve_state(dup, dup, dfc, True)
+    
+    def output_first_move_policy(self):
+        pass
+
+if __name__ == "__main__":
+    mdp = Dp_solver(sys.argv[1])
+    mdp.output_first_move_policy()
