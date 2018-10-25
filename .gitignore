@@ -1,6 +1,12 @@
 # for some people who don't add .vscode to git exclude
 .vscode/
 
+# pyc
+*.pyc
+./Dealer.pyc
+./Markov.pyc
+./Iteration.pyc
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
