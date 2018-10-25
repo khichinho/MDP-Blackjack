@@ -3,7 +3,7 @@
 
 class Transition:
 
-    def init(self, probability, action, state_rep):
+    def __init__(self, probability, action, state_rep):
         # has params
         # probability: float
         # action: char
@@ -517,7 +517,7 @@ class Transition:
                                 (21, 0, 0, False)))
 
 class State:
-    def init(self, rep_first, rep_second, dealers_first_card, is_first, is_goal, face_card_probability):
+    def __init__(self, rep_first, rep_second, dealers_first_card, is_first, is_goal, face_card_probability):
         self.rep_first = rep_first
         self.rep_second = rep_second
         self.dealers_first_card = dealers_first_card
@@ -534,7 +534,7 @@ class State:
 
 # initialize all states for the game here.
 class Markov:
-    def init(self, face_card_probability):
+    def __init__(self, face_card_probability):
         # generate states
         # hard values first and non first
         self.states = {}
@@ -564,4 +564,14 @@ class Markov:
 
         # Bust
         self.states[(21, 0, 0, False, True)] = State(21, 0, 0, False, True, face_card_probability)
-     
+
+def check_transitions():
+    test_markov = Markov(0.37)
+    for key in test_markov.states:
+        print key
+        print test_markov.states[key].transitions
+
+
+
+if __name__ == "__main__":
+    check_transitions() 
