@@ -56,7 +56,7 @@ class Dp_solver:
             self.val_act_dict[(11, 21, dfc, True)] = (Dealer.rewardPlayer(21, dfc, self.fcp, True), 'G')
 
         # Bust
-        self.val_act_dict[(21, 0, 0, False)] = -1.0
+        self.val_act_dict[(21, 0, 0, False)] = (-1.0, 'G')
 
         # first hard values
         for hard_value in xrange(2, 22):
@@ -87,10 +87,10 @@ class Dp_solver:
         
         # hard values
         for hard_value in xrange(5, 20):
-            output_file.write(hard_value)
+            output_file.write(str(hard_value))
             output_file.write("\t")
             for dfc in xrange(2, 12):
-                output_file.write(self.val_act_dict[(0, hard_value%11, dfc, True)])
+                output_file.write(self.val_act_dict[(0, hard_value%11, dfc, True)][1])
                 if dfc != 12:
                     output_file.write(" ")
             output_file.write("\n")
@@ -98,20 +98,20 @@ class Dp_solver:
         # soft values
         for soft_value in xrange(2, 10):
             output_file.write("A")
-            output_file.write(soft_value)
+            output_file.write(str(soft_value))
             output_file.write("\t")
             for dfc in xrange(2, 12):
-                output_file.write(self.val_act_dict[(1, soft_value%11, dfc, True)])
+                output_file.write(self.val_act_dict[(1, soft_value%11, dfc, True)][1])
                 if dfc != 12:
                     output_file.write(" ")
             output_file.write("\n")
 
         for dup in xrange(2, 10):
-            output_file.write(dup)
-            output_file.write(dup)
+            output_file.write(str(dup))
+            output_file.write(str(dup))
             output_file.write("\t")
             for dfc in xrange(2, 12):
-                output_file.write(self.val_act_dict[(dup%11, dup%11, dfc, True)])
+                output_file.write(self.val_act_dict[(dup%11, dup%11, dfc, True)][1])
                 if dfc != 12:
                     output_file.write(" ")
             output_file.write("\n")
@@ -121,7 +121,7 @@ class Dp_solver:
         output_file.write("A")
         output_file.write("\t")
         for dfc in xrange(2, 12):
-            output_file.write(self.val_act_dict[(1, 1, dfc, True)])
+            output_file.write(self.val_act_dict[(1, 1, dfc, True)][1])
             if dfc != 12:
                 output_file.write(" ")
 
@@ -129,4 +129,5 @@ class Dp_solver:
 
 if __name__ == "__main__":
     mdp = Dp_solver(float(sys.argv[1]))
+    mdp.solve_mdp()
     mdp.output_first_move_policy()
