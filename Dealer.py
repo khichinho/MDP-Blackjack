@@ -11,7 +11,7 @@
 
 reward_dict = {}
 
-def rewardPlayer(player_hand_value, dealer_first_card, probability_face_card):
+def rewardPlayer(player_hand_value, dealer_first_card, probability_face_card, is_blackjack):
 	if(dealer_first_card == 1):
 		return(reward_player_calculate(player_hand_value, 1, 11, probability_face_card))
 	else:
@@ -73,7 +73,8 @@ def tellReward(player_hand_value, is_ace_card, dealer_hand_value):
 		elif(player_hand_value < dealer_hand_value):
 			return -1
 
-for i in range(2,22):
-	print("\t")
-	for j in range(1,11):
-		print(str(i)+" "+str(j)+" "+str(rewardPlayer(i,j, 0.37)))
+if __name__ == "__main__":
+	for i in range(2,22):
+		print("\t")
+		for j in range(1,11):
+			print(str(i)+" "+str(j)+" "+str(rewardPlayer(i,j, 0.37)))

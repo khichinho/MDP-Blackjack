@@ -537,9 +537,9 @@ class State:
 # initialize all states for the game here.
 class Markov:
     def __init__(self, face_card_probability):
-        # generate states
-        # hard values first and non first
         self.states = {}
+        # generate states
+        # hard values first and non first      
         for hard_value in xrange(2, 22):
             for dfc in xrange(11):
                 self.states[(0, hard_value, dfc, True)] = State(0, hard_value, dfc, True, False, face_card_probability)
@@ -556,13 +556,13 @@ class Markov:
             for dfc in xrange(11):
                 self.states[(dup, dup, dfc, True)] = State(dup, dup, dfc, True, False, face_card_probability)
 
-        # Goal states
+        # Stand Goal states
         for player_hv in xrange(2, 22):
             for dfc in xrange(11):
                 self.states[(11, player_hv, dfc, False)] = State(0, player_hv, dfc, False, True, face_card_probability)
 
         # Black Jack
-        self.states[(11, 21, 0, False)] = State(11, 21, 0, False, True, face_card_probability)
+        self.states[(11, 21, 0, True)] = State(11, 21, 0, False, True, face_card_probability)
 
         # Bust
         self.states[(21, 0, 0, False)] = State(21, 0, 0, False, True, face_card_probability)
