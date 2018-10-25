@@ -542,30 +542,30 @@ class Markov:
         self.states = {}
         for hard_value in xrange(2, 22):
             for dfc in xrange(11):
-                self.states[(0, hard_value, dfc, True, False)] = State(0, hard_value, dfc, True, False, face_card_probability)
-                self.states[(0, hard_value, dfc, False, False)] = State(0, hard_value, dfc, False, False, face_card_probability)
+                self.states[(0, hard_value, dfc, True)] = State(0, hard_value, dfc, True, False, face_card_probability)
+                self.states[(0, hard_value, dfc, False)] = State(0, hard_value, dfc, False, False, face_card_probability)
         
         # soft values
         for soft_value in xrange(2, 10):
             for dfc in xrange(11):
-                self.states[(1, soft_value, dfc, True, False)] = State(1, soft_value, dfc, True, False, face_card_probability)
-                self.states[(1, soft_value, dfc, False, False)] = State(1, soft_value, dfc, False, False, face_card_probability)
+                self.states[(1, soft_value, dfc, True)] = State(1, soft_value, dfc, True, False, face_card_probability)
+                self.states[(1, soft_value, dfc, False)] = State(1, soft_value, dfc, False, False, face_card_probability)
         
         # duplicates
         for dup in xrange(11):
             for dfc in xrange(11):
-                self.states[(dup, dup, dfc, True, False)] = State(dup, dup, dfc, True, False, face_card_probability)
+                self.states[(dup, dup, dfc, True)] = State(dup, dup, dfc, True, False, face_card_probability)
 
         # Goal states
         for player_hv in xrange(2, 22):
             for dfc in xrange(11):
-                self.states[(11, player_hv, dfc, False, True)] = State(0, player_hv, dfc, False, True, face_card_probability)
+                self.states[(11, player_hv, dfc, False)] = State(0, player_hv, dfc, False, True, face_card_probability)
 
         # Black Jack
-        self.states[(11, 21, 0, False, True)] = State(11, 21, 0, False, True, face_card_probability)
+        self.states[(11, 21, 0, False)] = State(11, 21, 0, False, True, face_card_probability)
 
         # Bust
-        self.states[(21, 0, 0, False, True)] = State(21, 0, 0, False, True, face_card_probability)
+        self.states[(21, 0, 0, False)] = State(21, 0, 0, False, True, face_card_probability)
 
 def check_transitions():
     test_markov = Markov(0.37)
