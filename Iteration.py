@@ -86,5 +86,5 @@ class Dp_solver:
         pass
 
 if __name__ == "__main__":
-    mdp = Dp_solver(sys.argv[1])
+    mdp = Dp_solver(float(sys.argv[1]))
     mdp.output_first_move_policy()
