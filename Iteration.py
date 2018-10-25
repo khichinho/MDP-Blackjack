@@ -83,7 +83,49 @@ class Dp_solver:
                     curr_val = self.solve_state(dup, dup, dfc, True)
     
     def output_first_move_policy(self):
-        pass
+        output_file = open("policy.txt", 'w')
+        
+        # hard values
+        for hard_value in xrange(5, 20):
+            output_file.write(hard_value)
+            output_file.write("\t")
+            for dfc in xrange(2, 12):
+                output_file.write(self.val_act_dict[(0, hard_value%11, dfc, True)])
+                if dfc != 12:
+                    output_file.write(" ")
+            output_file.write("\n")
+        
+        # soft values
+        for soft_value in xrange(2, 10):
+            output_file.write("A")
+            output_file.write(soft_value)
+            output_file.write("\t")
+            for dfc in xrange(2, 12):
+                output_file.write(self.val_act_dict[(1, soft_value%11, dfc, True)])
+                if dfc != 12:
+                    output_file.write(" ")
+            output_file.write("\n")
+
+        for dup in xrange(2, 10):
+            output_file.write(dup)
+            output_file.write(dup)
+            output_file.write("\t")
+            for dfc in xrange(2, 12):
+                output_file.write(self.val_act_dict[(dup%11, dup%11, dfc, True)])
+                if dfc != 12:
+                    output_file.write(" ")
+            output_file.write("\n")
+        
+        # dup aces
+        output_file.write("A")
+        output_file.write("A")
+        output_file.write("\t")
+        for dfc in xrange(2, 12):
+            output_file.write(self.val_act_dict[(1, 1, dfc, True)])
+            if dfc != 12:
+                output_file.write(" ")
+
+        
 
 if __name__ == "__main__":
     mdp = Dp_solver(float(sys.argv[1]))
