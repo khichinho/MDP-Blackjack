@@ -98,9 +98,19 @@ class Transition:
             elif rep_first == rep_second and 1 <= rep_first <= 10:
                 if card_possiblity == 1:
                     # aces after any duplicates
-                    trans_list_to_return.append(Transition((1-fcp)/9, 'H', 
-                    (1, rep_second+rep_first, dealers_first_card, False)))
-                
+                    if rep_second+rep_first <= 9:
+                        trans_list_to_return.append(Transition((1-fcp)/9, 'H', 
+                        (1, rep_second+rep_first, dealers_first_card, False)))
+                    elif rep_second+rep_first+11 <= 21:
+                        trans_list_to_return.append(Transition((1-fcp)/9, 'H', 
+                        (0, rep_second+rep_first+11, dealers_first_card, False)))
+                    elif rep_second+rep_first+1 <= 21:
+                        trans_list_to_return.append(Transition((1-fcp)/9, 'H', 
+                        (0, rep_second+rep_first+1, dealers_first_card, False)))
+                    else:
+                        trans_list_to_return.append(Transition((1-fcp)/9, 'H', 
+                        (21, 0, 0, False)))
+
                 elif 2 <= card_possiblity <= 9:
                     # its duplicate aces
                     if rep_first == 1:
@@ -172,7 +182,7 @@ class Transition:
         # here you can get twice the reward so 2 Transitions appended to list for every case
 
         # possible only in X, X, dealer_card, True state. don't need to check is first still.
-        if is_first:
+        if is_first and (rep_first == rep_second):
             # first splitable Ace duplicates
             if rep_first == 1:
                 if rep_second == 1:
@@ -196,29 +206,32 @@ class Transition:
                                 if card_possiblity2 == 1:
                                     # made to non first non splittable ace duplicates.
                                     temp_trans_var = Transition(pc1*pc2, 'P', 
-                                    (0, 12, dealers_first_card, False))
+                                    (1, 1, dealers_first_card, False))
                                     # hand 1
                                     trans_list_to_return.append(temp_trans_var)
                                     # hand 2
                                     trans_list_to_return.append(temp_trans_var)
 
-                                elif 2 <= card_possiblity2 <= 9:
-                                    # hand 1
-                                    trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                    (0, 12, dealers_first_card, False)))
-                                    #  hand 2
-                                    if card_possiblity2 + 11 > 21:
-                                        trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (0, card_possiblity2+11, dealers_first_card, False)))
-
-                                # face card
-                                else:
+                                elif 2 <= card_possiblity2 <= 10:
                                     # hand 1
                                     trans_list_to_return.append(Transition(pc1*pc2, 'P', 
                                     (1, 1, dealers_first_card, False)))
-                                    # hand 2
-                                    trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                    (11, 21, dealers_first_card, False)))
+                                    #  hand 2
+                                    if card_possiblity2 + 11 <= 21:
+                                        trans_list_to_return.append(Transition(pc1*pc2, 'P', 
+                                        (0, card_possiblity2+11, dealers_first_card, False)))
+                                    else:
+                                        trans_list_to_return.append(Transition(pc1*pc2, 'P', 
+                                        (21, 0, 0, False)))
+
+                                # # face card
+                                # else:
+                                #     # hand 1
+                                #     trans_list_to_return.append(Transition(pc1*pc2, 'P', 
+                                #     (1, 1, dealers_first_card, False)))
+                                #     # hand 2
+                                #     trans_list_to_return.append(Transition(pc1*pc2, 'P', 
+                                #     (11, 21, dealers_first_card, False)))
 
                             elif 2 <= card_possiblity1 <= 9:
                                 if card_possiblity2 == 1:
@@ -258,7 +271,7 @@ class Transition:
                                 elif 2 <= card_possiblity2 <= 9:
                                     # hand 1
                                     trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                    (0, 21, dealers_first_card, False)))
+                                    (11, 21, dealers_first_card, False)))
                                     # hand 2
                                     trans_list_to_return.append(Transition(pc1*pc2, 'P', 
                                     (1, card_possiblity2, dealers_first_card, False)))
@@ -564,6 +577,10 @@ class Markov:
         for dup in xrange(1, 11):
             for dfc in xrange(1, 11):
                 self.states[(dup, dup, dfc, True)] = State(dup, dup, dfc, True, False, face_card_probability)
+
+        # non splitable aces
+        for dfc in xrange(1, 11):
+            self.states[(1, 1, dfc, False)] = State(1, 1, dfc, False, False, face_card_probability)
 
         # Stand Goal states
         for player_hv in xrange(2, 22):

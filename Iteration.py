@@ -89,10 +89,13 @@ class Dp_solver:
                 prev_val = 0.0
                 curr_val = 1.0
                 epsilon = 0.1
+                max_divergence = 100
                 # self.val_act_dict[(dup, dup, dfc, True)] = 
                 while not(-epsilon < (curr_val-prev_val) < epsilon):
                     prev_val = curr_val
                     curr_val = self.solve_state(dup, dup, dfc, True)
+                    if (curr_val-prev_val > max_divergence):
+                        break
     
     def output_first_move_policy(self):
         output_file = open("policy.txt", 'w')
