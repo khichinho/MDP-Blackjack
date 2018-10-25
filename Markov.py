@@ -341,15 +341,15 @@ class Transition:
                                 if card_possiblity2 == 1:
                                     # hand 1
                                     trans_list_to_return.append(Transition(((1-fcp)/9)**2, 'P', 
-                                    (11, 21, dealers_first_card, False)))
+                                    (11, 21, dealers_first_card, True)))
                                     # hand 2
                                     trans_list_to_return.append(Transition(((1-fcp)/9)**2, 'P', 
-                                    (11, 21, dealers_first_card, False)))
+                                    (11, 21, dealers_first_card, True)))
 
                                 elif 2 <= card_possiblity2 <= 10:
                                     # hand 1
                                     trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                    (11, 21, dealers_first_card, False)))
+                                    (11, 21, dealers_first_card, True)))
                                     # hand 2
                                     # split possible
                                     if card_possiblity2 == rep_second:
@@ -371,7 +371,7 @@ class Transition:
                                         (0, rep_first+card_possiblity1, dealers_first_card, True)))
                                     # hand 2
                                     trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                    (11, 21, dealers_first_card, False)))
+                                    (11, 21, dealers_first_card, True)))
 
                                 elif 2 <= card_possiblity2 <= 10:
                                     # hand 1
@@ -541,28 +541,29 @@ class Markov:
         # generate states
         # hard values first and non first      
         for hard_value in xrange(2, 22):
-            for dfc in xrange(11):
+            for dfc in xrange(1, 11):
                 self.states[(0, hard_value, dfc, True)] = State(0, hard_value, dfc, True, False, face_card_probability)
                 self.states[(0, hard_value, dfc, False)] = State(0, hard_value, dfc, False, False, face_card_probability)
         
         # soft values
         for soft_value in xrange(2, 10):
-            for dfc in xrange(11):
+            for dfc in xrange(1, 11):
                 self.states[(1, soft_value, dfc, True)] = State(1, soft_value, dfc, True, False, face_card_probability)
                 self.states[(1, soft_value, dfc, False)] = State(1, soft_value, dfc, False, False, face_card_probability)
         
         # duplicates
-        for dup in xrange(11):
-            for dfc in xrange(11):
+        for dup in xrange(1, 11):
+            for dfc in xrange(1, 11):
                 self.states[(dup, dup, dfc, True)] = State(dup, dup, dfc, True, False, face_card_probability)
 
         # Stand Goal states
         for player_hv in xrange(2, 22):
-            for dfc in xrange(11):
+            for dfc in xrange(1, 11):
                 self.states[(11, player_hv, dfc, False)] = State(0, player_hv, dfc, False, True, face_card_probability)
 
         # Black Jack
-        self.states[(11, 21, 0, True)] = State(11, 21, 0, False, True, face_card_probability)
+        for dfc in xrange(1, 11): 
+            self.states[(11, 21, dfc, True)] = State(11, 21, 0, False, True, face_card_probability)
 
         # Bust
         self.states[(21, 0, 0, False)] = State(21, 0, 0, False, True, face_card_probability)
