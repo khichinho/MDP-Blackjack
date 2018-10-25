@@ -516,6 +516,8 @@ class Transition:
                                 trans_list_to_return.append(Transition(pc, 'H', 
                                 (21, 0, 0, False)))
 
+        return trans_list_to_return
+
 class State:
     def __init__(self, rep_first, rep_second, dealers_first_card, is_first, is_goal, face_card_probability):
         self.rep_first = rep_first
@@ -568,8 +570,10 @@ class Markov:
 def check_transitions():
     test_markov = Markov(0.37)
     for key in test_markov.states:
-        print key
-        print test_markov.states[key].transitions
+        print "key - ", key
+        for trans in test_markov.states[key].transitions:
+            print trans.probability, ", ", trans.action, ", ", trans.state_rep
+        print "------"
 
 
 
