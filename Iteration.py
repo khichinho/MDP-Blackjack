@@ -13,10 +13,12 @@ class Dp_solver:
         if rep_first == rep_second and rep_first == 1 and not is_first:
             return max([self.solve_state(0, 2, dealer_fc, False), self.solve_state(0, 12, dealer_fc, False)])
 
+        # dont want this in duplicate 
         if rep_first != rep_second:
             if (rep_first, rep_second, dealer_fc, is_first) in self.val_act_dict:
                 return self.val_act_dict[(rep_first, rep_second, dealer_fc, is_first)][0]
         
+        # but still want (11, 11, ., .)
         if rep_first == 11:
             if (rep_first, rep_second, dealer_fc, is_first) in self.val_act_dict:
                 return self.val_act_dict[(rep_first, rep_second, dealer_fc, is_first)][0]
@@ -27,6 +29,7 @@ class Dp_solver:
         P_value = 0.0
         D_value = 0.0
 
+        # dont let impossible move be picked over negative possible ones
         H_possible = False
         S_possible = False
         P_possible = False
@@ -171,6 +174,6 @@ class Dp_solver:
 
 if __name__ == "__main__":
     # mdp = Dp_solver(float(sys.argv[1]))
-    mdp = Dp_solver(0.1)
+    mdp = Dp_solver(4.0/13)
     mdp.solve_mdp()
     mdp.output_first_move_policy()
