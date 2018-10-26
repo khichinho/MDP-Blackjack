@@ -26,6 +26,8 @@ class Dp_solver:
         state_got = self.to_solve_mdp.states[(rep_first, rep_second, dealer_fc, is_first)]
         H_value = 0.0
         S_value = 0.0
+        P_except_same_value = 0.0
+        P_same_count = 0.0
         P_value = 0.0
         D_value = 0.0
 
@@ -44,13 +46,18 @@ class Dp_solver:
                 S_value += trans.probability*self.solve_state(*trans.state_rep)
             elif trans.action == 'P':
                 P_possible = True
-                if rep_first == rep_second:
-                    P_value += trans.probability*self.val_act_dict[(rep_first, rep_second, dealer_fc, is_first)][0]
+                if trans.state_rep[0] == trans.state_rep[1]:
+                    P_except_same_value += trans.probability
                 else:
-                    P_value += trans.probability*self.solve_state(*trans.state_rep)
+                    P_except_same_value += trans.probability*self.solve_state(*trans.state_rep)
             elif trans.action == 'D':
                 D_possible = True
                 D_value += 2*trans.probability*self.solve_state(*trans.state_rep)
+        
+        if rep_first == rep_second:
+            P_value = P_except_same_value/(1-P_same_count)
+        else:
+            P_value = P_except_same_value
 
         max_from_list = []
         if H_possible:
@@ -107,17 +114,17 @@ class Dp_solver:
         # duplicates
         for dup in xrange(1, 11):
             for dfc in xrange(1, 11):
-                self.val_act_dict[(dup, dup, dfc, True)] = (0.0, 'N')
+                # self.val_act_dict[(dup, dup, dfc, True)] = (0.0, 'N')
                 prev_val = 0.0
                 curr_val = 1.0
                 epsilon = 0.1
-                max_divergence = 100
+                max_divergence = 15
                 # self.val_act_dict[(dup, dup, dfc, True)] = 
-                while not(-epsilon < (curr_val-prev_val) < epsilon):
-                    prev_val = curr_val
-                    curr_val = self.solve_state(dup, dup, dfc, True)
-                    if (curr_val-prev_val > max_divergence):
-                        break
+                # while not(-epsilon < (curr_val-prev_val) < epsilon):
+                #     prev_val = curr_val
+                curr_val = self.solve_state(dup, dup, dfc, True)
+                    # if (curr_val-prev_val > max_divergence):
+                    #     break
     
     def output_first_move_policy(self):
         output_file = open("policy.txt", 'w')
@@ -147,7 +154,7 @@ class Dp_solver:
                     output_file.write(" ")
             output_file.write("\n")
 
-        for dup in xrange(2, 10):
+        for dup in xrange(2, 11):
             output_file.write(str(dup))
             output_file.write(str(dup))
             output_file.write("\t")
