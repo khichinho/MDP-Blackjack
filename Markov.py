@@ -249,26 +249,26 @@ class Transition:
                                     # hand 1
                                     if rep_first == 10:
                                         trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (0, 21, dealers_first_card, False)))
+                                        (0, 21, dealers_first_card, True)))
                                     else:
                                         trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (1, card_possiblity1, dealers_first_card, False)))
+                                        (1, card_possiblity1, dealers_first_card, True)))
                                     # hand 2
                                     if rep_second == 10:
                                         trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (0, 21, dealers_first_card, False)))
+                                        (0, 21, dealers_first_card, True)))
                                     else:
                                         trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (1, card_possiblity2, dealers_first_card, False)))
+                                        (1, card_possiblity2, dealers_first_card, True)))
 
                                 elif 2 <= card_possiblity2 <= 10:
                                     # hand 1
                                     if rep_first == 10:
                                         trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (0, 21, dealers_first_card, False)))
+                                        (0, 21, dealers_first_card, True)))
                                     else:
                                         trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (1, card_possiblity1, dealers_first_card, False)))
+                                        (1, card_possiblity1, dealers_first_card, True)))
                                     # hand 2
                                     # split possible
                                     if card_possiblity2 == rep_second:
@@ -291,10 +291,10 @@ class Transition:
                                     # hand 2
                                     if rep_second == 10:
                                         trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (0, 21, dealers_first_card, False)))
+                                        (0, 21, dealers_first_card, True)))
                                     else:
                                         trans_list_to_return.append(Transition(pc1*pc2, 'P', 
-                                        (1, card_possiblity2, dealers_first_card, False)))
+                                        (1, card_possiblity2, dealers_first_card, True)))
 
                                 elif 2 <= card_possiblity2 <= 10:
                                     # hand 1
