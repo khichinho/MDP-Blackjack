@@ -389,7 +389,7 @@ class Transition:
 
                             trans_list_to_return.append(Transition(pc, 'D', 
                             (11, rep_second+11+1, dealers_first_card, False)))
-                            
+
                             # elif rep_second+1+1 <= 21:
                             #     trans_list_to_return.append(Transition(pc, 'D', 
                             #     (11, rep_second+rep_first+1, dealers_first_card, False)))
@@ -471,11 +471,11 @@ class Markov:
         # Stand Goal states
         for player_hv in xrange(2, 22):
             for dfc in xrange(1, 11):
-                self.states[(11, player_hv, dfc, False)] = State(0, player_hv, dfc, False, True, face_card_probability)
+                self.states[(11, player_hv, dfc, False)] = State(11, player_hv, dfc, False, True, face_card_probability)
 
         # Black Jack
         for dfc in xrange(1, 11): 
-            self.states[(11, 21, dfc, True)] = State(11, 21, 0, False, True, face_card_probability)
+            self.states[(11, 21, dfc, True)] = State(11, 21, dfc, False, True, face_card_probability)
 
         # Bust
         self.states[(21, 0, 0, False)] = State(21, 0, 0, False, True, face_card_probability)
