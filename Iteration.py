@@ -27,26 +27,45 @@ class Dp_solver:
         P_value = 0.0
         D_value = 0.0
 
+        H_possible = False
+        S_possible = False
+        P_possible = False
+        D_possible = False
+
         for trans in state_got.transitions:
             if trans.action == 'H':
+                H_possible = True
                 H_value += trans.probability*self.solve_state(*trans.state_rep)
             elif trans.action == 'S':
+                S_possible = True
                 S_value += trans.probability*self.solve_state(*trans.state_rep)
             elif trans.action == 'P':
+                P_possible = True
                 if rep_first == rep_second:
                     P_value += trans.probability*self.val_act_dict[(rep_first, rep_second, dealer_fc, is_first)][0]
                 else:
                     P_value += trans.probability*self.solve_state(*trans.state_rep)
             elif trans.action == 'D':
+                D_possible = True
                 D_value += 2*trans.probability*self.solve_state(*trans.state_rep)
 
-        max_value = max([H_value, S_value, P_value, D_value])
+        max_from_list = []
+        if H_possible:
+            max_from_list.append(H_value)
+        if S_possible:
+            max_from_list.append(S_value)
+        if D_possible:
+            max_from_list.append(D_value)
+        if P_possible:
+            max_from_list.append(P_value)
 
-        if max_value == D_value:
+        max_value = max(max_from_list)
+
+        if max_value == D_value and D_possible:
             best_action = 'D'
-        elif max_value == P_value:
+        elif max_value == P_value and P_possible:
             best_action = 'P'
-        elif max_value == H_value:
+        elif max_value == H_value and H_possible:
             best_action = 'H'
         else:
             best_action = 'S'
@@ -63,7 +82,7 @@ class Dp_solver:
             for dfc in xrange(1, 11):
                 self.val_act_dict[(11, player_hv, dfc, False)] = (Dealer.rewardPlayer(player_hv, dfc, self.fcp, False), 'G')
 
-        # Black Jack
+        # Black Jacks
         for dfc in xrange(1, 11):
             self.val_act_dict[(11, 21, dfc, True)] = (Dealer.rewardPlayer(21, dfc, self.fcp, True), 'G')
 
