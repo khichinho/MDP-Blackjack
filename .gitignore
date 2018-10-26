@@ -1,5 +1,6 @@
 # for some people who don't add .vscode to git exclude
 .vscode/
+policy.txt
 
 # pyc
 *.pyc
