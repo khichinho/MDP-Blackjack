@@ -475,7 +475,7 @@ class Markov:
 
         # Black Jack
         for dfc in xrange(1, 11): 
-            self.states[(11, 21, dfc, True)] = State(11, 21, dfc, False, True, face_card_probability)
+            self.states[(11, 21, dfc, True)] = State(11, 21, dfc, True, True, face_card_probability)
 
         # Bust
         self.states[(21, 0, 0, False)] = State(21, 0, 0, False, True, face_card_probability)
