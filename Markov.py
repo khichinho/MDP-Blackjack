@@ -127,7 +127,7 @@ class Transition:
                         else:
                             trans_list_to_return.append(Transition(pc, 'H', 
                             (21, 0, 0, False)))
-                            
+
         # ACTION STAND
 
         # when players stands, calculate the value of hand and chain to goal state 
@@ -141,28 +141,28 @@ class Transition:
                 trans_list_to_return.append(Transition(1, 'S', 
                 (11, 12, dealers_first_card, False)))
             
-            elif rep_second + 11 > 21:
-                trans_list_to_return.append(Transition(1, 'S', 
-                (11, rep_second+1, dealers_first_card, False)))
-            
-            # rep_sceond >= 1. case where ace+something ace being 11 bust already considered.
-            # what is only left is ace = 11 doesn't bust
-            else:
+            elif rep_second + 11 <= 21:
                 trans_list_to_return.append(Transition(1, 'S', 
                 (11, rep_second+11, dealers_first_card, False)))
-            
+           
+            elif rep_second + 1 <= 21:
+                trans_list_to_return.append(Transition(1, 'S', 
+                (11, rep_second+1, dealers_first_card, False)))
+            # noone can bust (1, 1-9, ., .)
+          
         elif rep_first == 0:
             # busting should be handle in hit case. here rep_first+rep_second <= 21 always.
+            # i.e no busting can happen here
             trans_list_to_return.append(Transition(1, 'S', 
-            (11, rep_first+rep_second, dealers_first_card, False)))
+            (11,rep_second, dealers_first_card, False)))
 
-        # for duplicates basically.
-        # could even write else here because other states will most probably not violate these condition. just a precaution
-        elif 2 <= rep_first <= 10:
-            if 2 <= rep_second <= 10:
-                trans_list_to_return.append(Transition(1, 'S', 
-                (11, rep_first+rep_second, dealers_first_card, False)))
-                # no other case possible for this representation of states
+        # for duplicates only of form (2-10, 2-10, ., .).
+        elif rep_first == rep_second:
+            if 2 <= rep_first <= 10:
+                if 2 <= rep_second <= 10:
+                    trans_list_to_return.append(Transition(1, 'S', 
+                    (11, rep_first+rep_second, dealers_first_card, False)))
+                    # no other case possible for this representation of states
         
         # ACTION SPLIT
         # here you can get twice the reward so 2 Transitions appended to list for every case
