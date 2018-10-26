@@ -42,14 +42,14 @@ class Dp_solver:
 
         max_value = max([H_value, S_value, P_value, D_value])
 
-        if max_value == H_value:
-            best_action = 'H'
-        elif max_value == S_value:
-            best_action = 'S'
+        if max_value == D_value:
+            best_action = 'D'
         elif max_value == P_value:
             best_action = 'P'
+        elif max_value == H_value:
+            best_action = 'H'
         else:
-            best_action = 'D'
+            best_action = 'S'
         
         # set in dict
         self.val_act_dict[(rep_first, rep_second, dealer_fc, is_first)] = (max_value, best_action)
@@ -106,7 +106,7 @@ class Dp_solver:
             output_file.write("\t")
             for dfc in xrange(2, 12):
                 if dfc == 11:
-                    dfc =12
+                    dfc = 12
                 output_file.write(self.val_act_dict[(0, hard_value, dfc%11, True)][1])
                 if dfc != 12:
                     output_file.write(" ")
@@ -131,7 +131,7 @@ class Dp_solver:
             output_file.write("\t")
             for dfc in xrange(2, 12):
                 if dfc == 11:
-                    dfc =12
+                    dfc = 12
                 output_file.write(self.val_act_dict[(dup, dup, dfc%11, True)][1])
                 if dfc != 12:
                     output_file.write(" ")
@@ -143,7 +143,7 @@ class Dp_solver:
         output_file.write("\t")
         for dfc in xrange(2, 12):
             if dfc == 11:
-                dfc =12
+                dfc = 12
             output_file.write(self.val_act_dict[(1, 1, dfc%11, True)][1])
             if dfc != 12:
                 output_file.write(" ")
