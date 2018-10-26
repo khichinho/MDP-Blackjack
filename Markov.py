@@ -168,16 +168,16 @@ class Transition:
         # here you can get twice the reward so 2 Transitions appended to list for every case
 
         # possible only in X, X, dealer_card, True state. don't need to check is first still.
-        for card_possiblity1 in xrange(1, 11):
-            for card_possiblity2 in xrange(1, 11):
-                pc1 = (1-fcp)/9
-                if card_possiblity1 == 10:
-                    pc1 = fcp
-                pc2 = (1-fcp)/9
-                if card_possiblity2 == 10:
-                    pc2 = fcp
-                
-                if is_first and (rep_first == rep_second):
+        if is_first and (rep_first == rep_second):
+            for card_possiblity1 in xrange(1, 11):
+                for card_possiblity2 in xrange(1, 11):
+                    pc1 = (1-fcp)/9
+                    if card_possiblity1 == 10:
+                        pc1 = fcp
+                    pc2 = (1-fcp)/9
+                    if card_possiblity2 == 10:
+                        pc2 = fcp
+                    
                     # first splitable Ace duplicates
                     if rep_first == 1:
                         if rep_second == 1:
@@ -319,37 +319,33 @@ class Transition:
         # only possible on first move or after split
         if is_first:
             for card_possiblity in xrange(1, 11):
+                # pc is probability of card
+                pc = (1-fcp)/9
+                if card_possiblity == 10:
+                    pc = fcp
 
                 # HARD VALUES
                 if rep_first == 0:
                     # ace comes for a hand containing no ace previously
                     if card_possiblity == 1:
                         if rep_second + 11 <= 21:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (11, rep_second+11, dealers_first_card, False)))
                         elif rep_second + 1 <= 21:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (11, rep_second+1, dealers_first_card, False)))
                         else:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (21, 0, 0, False)))
                     # any non face non ace card
-                    elif 2 <= card_possiblity <= 9:
+                    elif 2 <= card_possiblity <= 10:
                         if rep_second+card_possiblity > 21:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (21, 0, 0, False)))
                         else:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (11, rep_second+card_possiblity, dealers_first_card, False)))
-                    # face card
-                    else:
-                        if rep_second+card_possiblity > 21:
-                            trans_list_to_return.append(Transition(fcp, 'D', 
-                            (21, 0, 0, False)))
-                        else:
-                            trans_list_to_return.append(Transition(fcp, 'D', 
-                            (11, rep_second+card_possiblity, dealers_first_card, False)))
-            
+
                 # SOFT VALUES, Ace + something(except ace)
                 elif rep_first == 1 and rep_second != 1:
                     
@@ -357,77 +353,68 @@ class Transition:
                     if card_possiblity == 1:
                         # consider that ace = 1.
                         if rep_second + 11 + 1 <= 21:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (11, rep_second + 12, dealers_first_card, False)))
                         elif rep_second + 1 + 1 <= 21:
                             # only rep_second is from 2 to 9 where rep_first is 1. 
                             # So this only handle rep_second == 9.
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (11, rep_second + 2, dealers_first_card, False)))
                         else:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (21, 0, 0, False)))
-                    # any non face non ace card
-                    elif 2 <= card_possiblity <= 9:
+                    
+                    elif 2 <= card_possiblity <= 10:
                         # ace soft value states only go till 9
                         if rep_second+card_possiblity+11 <= 21:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (11, rep_second+card_possiblity+11, dealers_first_card, False)))
                         elif rep_second+card_possiblity+1 <= 21:
                             # consider ace as 1 not bust a rational player wouldn't bust hiimself. 
                             # picking 11 as ace value
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (11, rep_second+card_possiblity+1, dealers_first_card, False)))
                         else:
-                            trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                            trans_list_to_return.append(Transition(pc, 'D', 
                             (21, 0, 0, False)))
-                    # face card
-                    else:
-                        if rep_second+card_possiblity+11 <= 21:
-                            trans_list_to_return.append(Transition(fcp, 'D', 
-                            (11, rep_second+card_possiblity+11, dealers_first_card, False)))
-                        elif rep_second+card_possiblity+1 <= 21:
-                            trans_list_to_return.append(Transition(fcp, 'D', 
-                            (11, rep_second+card_possiblity+1, dealers_first_card, False)))
-                        else:
-                            trans_list_to_return.append(Transition(fcp, 'D', 
-                            (21, 0, 0, False)))
+                
                 # DUPLICATES
                 elif rep_first == rep_second and 1 <= rep_first < 10:
-                    pc = (1-fcp)/9
-                    if card_possiblity == 10:
-                        pc = fcp
                     
                     if card_possiblity == 1:
                         # aces after any duplicates
                         if rep_first == 1:
-                            if rep_second+11+1 <= 21:
-                                trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
-                                (11, rep_second+11+1, dealers_first_card, False)))
-                            elif rep_second+1+1 <= 21:
-                                trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
-                                (11, rep_second+rep_first+1, dealers_first_card, False)))
-                            else:
-                                trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
-                                (21, 0, 0, False)))
+                            # if 1+11+1 <= 21:
+                            # this case best and possible for any rational agent
+
+                            trans_list_to_return.append(Transition(pc, 'D', 
+                            (11, rep_second+11+1, dealers_first_card, False)))
+                            
+                            # elif rep_second+1+1 <= 21:
+                            #     trans_list_to_return.append(Transition(pc, 'D', 
+                            #     (11, rep_second+rep_first+1, dealers_first_card, False)))
+                            # else:
+                            #     trans_list_to_return.append(Transition(pc, 'D', 
+                            #     (21, 0, 0, False)))
                         else:
                             if rep_second+11+rep_first <= 21:
-                                trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                                trans_list_to_return.append(Transition(pc, 'D', 
                                 (11, rep_second+11+rep_first, dealers_first_card, False)))
                             elif rep_second+1+rep_first <= 21:
-                                trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                                trans_list_to_return.append(Transition(pc, 'D', 
                                 (11, rep_second+1+rep_first, dealers_first_card, False)))
                             else:
-                                trans_list_to_return.append(Transition((1-fcp)/9, 'D', 
+                                trans_list_to_return.append(Transition(pc, 'D', 
                                 (21, 0, 0, False)))
+
                     elif 2 <= card_possiblity <= 10:
                         if rep_first == 1:
-                            if rep_second+11+card_possiblity <= 21:
+                            if 1+11+card_possiblity <= 21:
                                 trans_list_to_return.append(Transition(pc, 'D', 
-                                (11, rep_second+card_possiblity+11, dealers_first_card, False)))
-                            elif rep_second+1+card_possiblity <= 21:
+                                (11, 1+card_possiblity+11, dealers_first_card, False)))
+                            elif 1+1+card_possiblity <= 21:
                                 trans_list_to_return.append(Transition(pc, 'D', 
-                                (11, rep_second+card_possiblity+1, dealers_first_card, False)))
+                                (11, 1+card_possiblity+1, dealers_first_card, False)))
                             else:
                                 trans_list_to_return.append(Transition(pc, 'D', 
                                 (21, 0, 0, False)))
